@@ -1,75 +1,87 @@
-import math
-"""
-    In Rail Fence Cipher, There's a problem when decrypting a text because there is a residue like this
-    PT = I Like Cakes
-    Row = 3
-        I K A S
-        L E K
-        I C E
-
-    CT = IKAS LEK ICE --> IKASLEKICE
-
-    When we write IKASLEKICE back to decrypt we have to know where to divide the text into
-    IKAS LEK ICE so we can work with it
-
-    that's why i use the counter, the counter make sure it gets divided the same as we encrypt it
-
-"""
-def display_encrypted(arr):
-    for row in arr:
-        print (" ".join(map(str,row)) , end='')
-
 def main():
-        
     text = input('Input Text : ')
     rows = int(input('Input Rows : '))
-
-    while True:
-        chc = input('Encrypt or Decrypt (0/1)')
-        if chc in ['0','1']:
-            break
-        print('Choose 0 / 1')
-
     text = text.replace(' ','')
 
+    while True:
+            chc = input('Encrypt or Decrypt (0/1)')
+            if chc in ['0','1']:
+                break
+                print('Choose 0 / 1')
+
+    print(len(text))
     if int(chc):
-        array = [ [] for i in range(rows)]   # Create Empty Array
-        residue = len(text) % rows           # Calculate Residue from Division                   
+            arr = [[ ' ' for y in range(len(text))] for x in range(rows)]
+            [ print(row) for row in arr ]
 
-        start = counter = 0                  
-
-        for i in range(rows):  
-            finish = start + len(text) // rows
-            if counter < residue:
-                finish = start + math.ceil( len(text) / rows )
-
-            array[i].append(text[start : finish])
-            start = finish
-            counter += 1
-
-        for i in range(rows):               # Change ['IKAS'] to ['I','K','A','S']
-            array[i] = list(array[i][0])
-
-        decrypted_text = ''
-        col = 0
-
-        for i in range(len(text)):
-            if i % rows == 0 and i != 0:
+            dir_down = None
+            row, col = 0 , 0
+            for i in range(len(text)):
+                if row == 0: dir_down = True   
+                if row == rows - 1: dir_down = False
+                        
+                arr[row][col] = '*'
                 col += 1
-            decrypted_text += array[i % rows][col]
-            
-        print(decrypted_text)
+                
+                if dir_down: row += 1    
+                else: row -= 1
 
-    else:
-        array = []
+            print('\n\n')
+            [ print(row) for row in arr ]
+            count = 0
+            for row in arr:
+                for i in range(len(row)):
+                    if row[i] == '*':
+                        row[i] = text[count]
+                        count += 1
 
-        for i in range(rows):
-            row = list()
-            row.append(text[i::rows])       # Select ILIKECAKES with step of rows so that it slice at IKAS LEK ICE
-            array.append(row)
+            print('\n\n')
+            [ print(row) for row in arr ]
 
-        print(array)
-        display_encrypted(array)
+            result = []
+            row, col = 0, 0
+            for i in range(len(text)):
+                    
+                if row == 0: dir_down = True       
+                if row == rows-1: dir_down = False        
+                        
+                if (arr[row][col] != '*'):
+                    result.append(arr[row][col])
+                    col += 1
+                        
+                if dir_down: row += 1      
+                else: row -= 1      
+
+            print('\n',result)          
+    else:    
+            arr = [ [] for x in range(rows)]
+            print(arr)
+            count = 0
+            finish = False
+
+            while True:
+                for j in range(0,rows-1):
+                    arr[j].append(text[count])
+                    count += 1
+
+                    if count >= len(text): 
+                        finish = True
+                        break
+
+                if finish : 
+                    break   
+
+                for k in range(rows - 1 ,0,-1):
+                    arr[k].append(text[count])
+                    count += 1
+
+                    if count >= len(text): 
+                        finish = True
+                        break
+
+                if finish : 
+                    break  
+            print(arr)
 
 if __name__ == '__main__':
     main()
