@@ -1,5 +1,5 @@
 # Traditional Cryptography Impelmentation with Python
-### Caesar Cipher
-### Rail Fence Cypher
-### Kamasutra Cipher
-### Vignere Cipher
+### 1. Caesar Cipher
+### 2. Rail Fence Cypher
+### 3. Kamasutra Cipher
+### 4. Vignere Cipher
